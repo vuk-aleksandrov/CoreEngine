@@ -29,6 +29,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/Windows.cmake"
   "C:/Program Files/CMake/share/cmake-3.22/Modules/Platform/WindowsPaths.cmake"
   "../CMakeLists.txt"
+  "../CoreEngine/CMakeLists.txt"
   "CMakeFiles/3.22.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeRCCompiler.cmake"
@@ -44,9 +45,11 @@ set(CMAKE_MAKEFILE_OUTPUTS
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
+  "CoreEngine/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/Game.dir/DependInfo.cmake"
+  "CoreEngine/CMakeFiles/CoreEngine.dir/DependInfo.cmake"
   )

@@ -63,29 +63,46 @@ CMAKE_BINARY_DIR = C:\Projects\CoreEngine\build
 
 # The main recursive "all" target.
 all: CMakeFiles/Game.dir/all
+all: CoreEngine/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
-preinstall:
+preinstall: CoreEngine/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/Game.dir/clean
+clean: CoreEngine/clean
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory CoreEngine
+
+# Recursive "all" directory target.
+CoreEngine/all: CoreEngine/CMakeFiles/CoreEngine.dir/all
+.PHONY : CoreEngine/all
+
+# Recursive "preinstall" directory target.
+CoreEngine/preinstall:
+.PHONY : CoreEngine/preinstall
+
+# Recursive "clean" directory target.
+CoreEngine/clean: CoreEngine/CMakeFiles/CoreEngine.dir/clean
+.PHONY : CoreEngine/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/Game.dir
 
 # All Build rule for target.
-CMakeFiles/Game.dir/all:
+CMakeFiles/Game.dir/all: CoreEngine/CMakeFiles/CoreEngine.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Game.dir\build.make CMakeFiles/Game.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Game.dir\build.make CMakeFiles/Game.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Projects\CoreEngine\build\CMakeFiles --progress-num=1,2 "Built target Game"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Projects\CoreEngine\build\CMakeFiles --progress-num=3,4 "Built target Game"
 .PHONY : CMakeFiles/Game.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Game.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Projects\CoreEngine\build\CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Projects\CoreEngine\build\CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Game.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Projects\CoreEngine\build\CMakeFiles 0
 .PHONY : CMakeFiles/Game.dir/rule
@@ -98,6 +115,32 @@ Game: CMakeFiles/Game.dir/rule
 CMakeFiles/Game.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Game.dir\build.make CMakeFiles/Game.dir/clean
 .PHONY : CMakeFiles/Game.dir/clean
+
+#=============================================================================
+# Target rules for target CoreEngine/CMakeFiles/CoreEngine.dir
+
+# All Build rule for target.
+CoreEngine/CMakeFiles/CoreEngine.dir/all:
+	$(MAKE) $(MAKESILENT) -f CoreEngine\CMakeFiles\CoreEngine.dir\build.make CoreEngine/CMakeFiles/CoreEngine.dir/depend
+	$(MAKE) $(MAKESILENT) -f CoreEngine\CMakeFiles\CoreEngine.dir\build.make CoreEngine/CMakeFiles/CoreEngine.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=C:\Projects\CoreEngine\build\CMakeFiles --progress-num=1,2 "Built target CoreEngine"
+.PHONY : CoreEngine/CMakeFiles/CoreEngine.dir/all
+
+# Build rule for subdir invocation for target.
+CoreEngine/CMakeFiles/CoreEngine.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Projects\CoreEngine\build\CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CoreEngine/CMakeFiles/CoreEngine.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Projects\CoreEngine\build\CMakeFiles 0
+.PHONY : CoreEngine/CMakeFiles/CoreEngine.dir/rule
+
+# Convenience name for target.
+CoreEngine: CoreEngine/CMakeFiles/CoreEngine.dir/rule
+.PHONY : CoreEngine
+
+# clean rule for target.
+CoreEngine/CMakeFiles/CoreEngine.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CoreEngine\CMakeFiles\CoreEngine.dir\build.make CoreEngine/CMakeFiles/CoreEngine.dir/clean
+.PHONY : CoreEngine/CMakeFiles/CoreEngine.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -1,5 +1,7 @@
 CMakeFiles/Game.dir/Game/src/main.cpp.obj: \
  C:\Projects\CoreEngine\Game\src\main.cpp \
+ C:/Projects/CoreEngine/CoreEngine/include/CoreEngine.h \
+ C:/Projects/CoreEngine/CoreEngine/include/export.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\iostream \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\c++config.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\os_defines.h \

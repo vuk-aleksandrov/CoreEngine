@@ -1,3 +1,6 @@
 C:/Projects/CoreEngine/build/CMakeFiles/Game.dir
 C:/Projects/CoreEngine/build/CMakeFiles/edit_cache.dir
 C:/Projects/CoreEngine/build/CMakeFiles/rebuild_cache.dir
+C:/Projects/CoreEngine/build/CoreEngine/CMakeFiles/CoreEngine.dir
+C:/Projects/CoreEngine/build/CoreEngine/CMakeFiles/edit_cache.dir
+C:/Projects/CoreEngine/build/CoreEngine/CMakeFiles/rebuild_cache.dir

@@ -128,6 +128,19 @@ Game/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Game.dir\build.make CMakeFiles/Game.dir/build
 .PHONY : Game/fast
 
+#=============================================================================
+# Target rules for targets named CoreEngine
+
+# Build rule for target.
+CoreEngine: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CoreEngine
+.PHONY : CoreEngine
+
+# fast build rule for target.
+CoreEngine/fast:
+	$(MAKE) $(MAKESILENT) -f CoreEngine\CMakeFiles\CoreEngine.dir\build.make CoreEngine/CMakeFiles/CoreEngine.dir/build
+.PHONY : CoreEngine/fast
+
 Game/src/main.obj: Game/src/main.cpp.obj
 .PHONY : Game/src/main.obj
 
@@ -160,6 +173,7 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... CoreEngine
 	@echo ... Game
 	@echo ... Game/src/main.obj
 	@echo ... Game/src/main.i

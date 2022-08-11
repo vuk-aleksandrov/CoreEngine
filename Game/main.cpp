@@ -4,7 +4,9 @@
 #include <OpenGL/Shader.h>
 #include <OpenGL/VertexArray.h>
 
-#include <GLFW/glfw3.h>
+#include <Window/Window.h>
+
+#include <iostream>
 
 int main() {
 	if (!glfwInit()) {
@@ -12,8 +14,7 @@ int main() {
 		return -1;
 	}
 
-	GLFWwindow* window = glfwCreateWindow(600, 600, "Game", nullptr, nullptr);
-	glfwMakeContextCurrent(window);
+	Window window(600, 600, "Game");
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cout << "Failed to initialize OpenGL context" << std::endl;
@@ -51,20 +52,13 @@ int main() {
 	program.Link();
 	program.Use();
 
-	while (!glfwWindowShouldClose(window)) {
+	while (window.IsOpen()) {
 		// Render here
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, nullptr);
 
-		// Swap front and back buffers
-		glfwSwapBuffers(window);
-
-		// Poll for and process events
-		glfwPollEvents();
+		window.Update();
 	}
-
-	glfwTerminate();
-
 	return 0;
 }

@@ -2,13 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(Engine)
 
-set(OPENGL_SOURCES
-    OpenGL/glad/glad.h
-    OpenGL/glad/glad.c
-    OpenGL/glad/khrplatform.h
-)
-
-add_library(Engine OpenGL/glad/glad.c)
+add_library(Engine "OpenGL/glad/glad.h" "OpenGL/glad/glad.c" "OpenGL/Buffer.h" "OpenGL/Buffer.cpp" "OpenGL/Shader.h" "OpenGL/Shader.cpp" "OpenGL/VertexArray.h" "OpenGL/VertexArray.cpp")
 
 target_include_directories(Engine PUBLIC /)
 

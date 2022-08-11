@@ -1,46 +1,70 @@
-#include <OpenGL/glad/glad.h>
+#pragma once
+
+#include <OpenGL/Buffer.h>
+#include <OpenGL/Shader.h>
+#include <OpenGL/VertexArray.h>
+
 #include <GLFW/glfw3.h>
 
-#include <iostream>
+int main() {
+	if (!glfwInit()) {
+		printf("Failed to init glfw\n");
+		return -1;
+	}
 
-int main()
-{
-    GLFWwindow *window;
+	GLFWwindow* window = glfwCreateWindow(600, 600, "Game", nullptr, nullptr);
+	glfwMakeContextCurrent(window);
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		std::cout << "Failed to initialize OpenGL context" << std::endl;
+		return -1;
+	}
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
+	// Vertex Array
+	gl::VertexArray vertexArray;
 
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
+	// Create vertex buffer
+	float vertexData[] = {
+		//		  vertices			     colors
+		-0.5f, -0.5f, 0.0f,	 	1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.0f,		0.0f, 1.0f, 0.0f,
+		0.5f,  0.5f, 0.0f,		0.0f, 0.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f,		0.0f, 0.0f, 0.0f
+	};
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize OpenGL context" << std::endl;
-        return -1;
-    }
+	gl::Buffer vertexBuffer(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+	
+	vertexArray.SetVertexAttribs(6 * sizeof(float),
+		{ {3, GL_FLOAT},{3, GL_FLOAT} });
 
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+	// Create index buffer
+	uint32_t indices[] = {
+		0, 1, 2,
+		0, 2, 3
+	};
 
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+	gl::Buffer indexBuffer(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        /* Poll for and process events */
-        glfwPollEvents();
-    }
+	gl::ShaderProgram program;
+	program.Attach(gl::Shader(GL_VERTEX_SHADER, "C:/Projects/3dr/shaders/shader.vert"));
+	program.Attach(gl::Shader(GL_FRAGMENT_SHADER, "C:/Projects/3dr/shaders/shader.frag"));
+	program.Link();
+	program.Use();
 
-    glfwTerminate();
-    return 0;
+	while (!glfwWindowShouldClose(window)) {
+		// Render here
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, nullptr);
+
+		// Swap front and back buffers
+		glfwSwapBuffers(window);
+
+		// Poll for and process events
+		glfwPollEvents();
+	}
+
+	glfwTerminate();
+
+	return 0;
 }

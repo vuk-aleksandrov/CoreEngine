@@ -2,7 +2,6 @@
 
 namespace gl
 {
-
 	VertexArray::VertexArray()
 	{
 		glGenVertexArrays(1, &id);

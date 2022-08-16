@@ -1,5 +1,8 @@
+#pragma once
+
 #include "Shader.h"
 
+#include <iostream>
 #include <fstream>
 
 namespace gl
@@ -35,7 +38,7 @@ namespace gl
 		std::string strFile;
 		while (getline(file, line))
 			strFile += line + '\n';
-		
+
 		return strFile;
 	}
 
@@ -106,4 +109,59 @@ namespace gl
 	{
 		glUseProgram(id);
 	}
+
+	void ShaderProgram::SetUniform_i(const char* name, const int& val)
+	{
+		int loc = glGetUniformLocation(id, name);
+		if (loc == -1)
+			std::cerr << "Uniform '" << name << "' not found.\n";
+
+		glUniform1i(loc, val);
+	}
+
+	void ShaderProgram::SetUniform_f(const char* name, const int& val)
+	{
+		int loc = glGetUniformLocation(id, name);
+		if (loc == -1)
+			std::cerr << "Uniform '" << name << "' not found.\n";
+
+		glUniform1f(loc, val);
+	}
+
+	void ShaderProgram::SetUniform_v3(const char* name, const float* val)
+	{
+		int loc = glGetUniformLocation(id, name);
+		if (loc == -1)
+			std::cerr << "Uniform '" << name << "' not found.\n";
+
+		glUniform3fv(loc, 1, val);
+	}
+
+	void ShaderProgram::SetUniform_v4(const char* name, const float* val)
+	{
+		int loc = glGetUniformLocation(id, name);
+		if (loc == -1)
+			std::cerr << "Uniform '" << name << "' not found.\n";
+
+		glUniform4fv(loc, 1, val);
+	}
+
+	void ShaderProgram::SetUniform_m3(const char* name, const float* val)
+	{
+		int loc = glGetUniformLocation(id, name);
+		if (loc == -1)
+			std::cerr << "Uniform '" << name << "' not found.\n";
+
+		glUniformMatrix3fv(loc, 1, false, val);
+	}
+
+	void ShaderProgram::SetUniform_m4(const char* name, const float* val)
+	{
+		int loc = glGetUniformLocation(id, name);
+		if (loc == -1)
+			std::cerr << "Uniform '" << name << "' not found.\n";
+
+		glUniformMatrix4fv(loc, 1, false, val);
+	}
+
 }

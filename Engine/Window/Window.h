@@ -12,4 +12,16 @@ struct Window
 	bool IsOpen();
 
 	void Update();
+
+	inline int Width() {
+		int width;
+		glfwGetWindowSize(handle, &width, nullptr);
+		return width;
+	}
+
+	inline int Height() {
+		int height;
+		glfwGetWindowSize(handle, nullptr, &height);
+		return height;
+	}
 };

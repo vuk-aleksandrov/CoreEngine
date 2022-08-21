@@ -13,8 +13,8 @@ add_library(Engine
 	"OpenGL/VertexArray.cpp"
 	"Window/Window.cpp"
 	"Window/Window.h"
+    "Math/Math.h"	
 )
-
 target_include_directories(Engine PUBLIC /)
 
 add_subdirectory(ThirdParty/glfw)

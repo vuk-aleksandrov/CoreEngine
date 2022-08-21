@@ -34,8 +34,10 @@ namespace gl
 
 		void SetUniform_i(const char* name, const int& val);
 		void SetUniform_f(const char* name, const int& val);
+		void SetUniform_v2(const char* name, const float* val);
 		void SetUniform_v3(const char* name, const float* val);
 		void SetUniform_v4(const char* name, const float* val);
+		void SetUniform_m2(const char* name, const float* val);
 		void SetUniform_m3(const char* name, const float* val);
 		void SetUniform_m4(const char* name, const float* val);
 	private:

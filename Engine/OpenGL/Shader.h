@@ -37,9 +37,9 @@ namespace gl
 		void SetUniform_v2(const char* name, const float* val);
 		void SetUniform_v3(const char* name, const float* val);
 		void SetUniform_v4(const char* name, const float* val);
-		void SetUniform_m2(const char* name, const float* val);
-		void SetUniform_m3(const char* name, const float* val);
-		void SetUniform_m4(const char* name, const float* val);
+		void SetUniform_m2(const char* name, const float* val, bool transpose = false);
+		void SetUniform_m3(const char* name, const float* val, bool transpose = false);
+		void SetUniform_m4(const char* name, const float* val, bool transpose = false);
 	private:
 		void LogLinkStatus();
 	};

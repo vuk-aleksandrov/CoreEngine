@@ -5,13 +5,12 @@ layout(location=1) in vec3 vertColor;
 
 out vec3 Color;
 
-uniform mat4 rotateX;
-uniform mat4 rotateY;
-uniform mat4 projection;
+uniform mat4 Rotation;
+uniform mat4 Projection;
 
 void main()
 {
 	Color=vertColor;
 
-	gl_Position=vec4(projection*rotateX*rotateY*vertPosition);
+	gl_Position= Projection * Rotation * vertPosition;
 }

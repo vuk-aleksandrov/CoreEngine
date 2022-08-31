@@ -15,7 +15,7 @@ namespace gl
 
 		void Delete();
 	private:
-		std::string LoadFile(const char* fileName);
+		std::string LoadFile(const char* fileDir);
 
 		void LogCompileStatus();
 	};

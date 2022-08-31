@@ -14,7 +14,9 @@ add_library(Engine
 	"Window/Window.cpp"
 	"Window/Window.h"
 	"Math/Math.h"
-)
+	"Input/Input.h"
+	"Input/Input.cpp"
+ )
 target_include_directories(Engine PUBLIC /)
 
 add_subdirectory(ThirdParty/glfw)

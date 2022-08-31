@@ -5,6 +5,9 @@
 #include <iostream>
 #include <fstream>
 
+#include <cstdio>
+#include <cstdlib>
+
 namespace gl
 {
 
@@ -17,6 +20,7 @@ namespace gl
 
 		glShaderSource(id, 1, src_cc, nullptr);
 		glCompileShader(id);
+		
 		LogCompileStatus();
 	}
 
@@ -30,9 +34,9 @@ namespace gl
 		glDeleteShader(id);
 	}
 
-	std::string Shader::LoadFile(const char* fileName)
+	std::string Shader::LoadFile(const char* fileDir)
 	{
-		std::ifstream file(fileName);
+		std::ifstream file(fileDir);
 		std::string line;
 
 		std::string strFile;
@@ -44,6 +48,8 @@ namespace gl
 
 	void Shader::LogCompileStatus()
 	{
+#ifndef NDEBUG
+
 		GLint result;
 		glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 		if (GL_FALSE == result)
@@ -62,6 +68,7 @@ namespace gl
 
 			printf("Shader compilation failed\n");
 		}
+#endif
 	}
 
 	ShaderProgram::ShaderProgram()
@@ -88,6 +95,7 @@ namespace gl
 
 	void ShaderProgram::LogLinkStatus()
 	{
+#ifndef NDEBUG
 		GLint status;
 		glGetProgramiv(id, GL_LINK_STATUS, &status);
 		if (GL_FALSE == status) {
@@ -103,6 +111,7 @@ namespace gl
 				free(log);
 			}
 		}
+#endif
 	}
 
 	void ShaderProgram::Use()
@@ -113,8 +122,6 @@ namespace gl
 	void ShaderProgram::SetUniform_i(const char* name, const int& val)
 	{
 		int loc = glGetUniformLocation(id, name);
-		//if (loc == -1)
-		//	std::cerr << "Uniform '" << name << "' not found.\n";
 
 		glUniform1i(loc, val);
 	}
@@ -122,8 +129,6 @@ namespace gl
 	void ShaderProgram::SetUniform_f(const char* name, const int& val)
 	{
 		int loc = glGetUniformLocation(id, name);
-		//if (loc == -1)
-		//	std::cerr << "Uniform '" << name << "' not found.\n";
 
 		glUniform1f(loc, val);
 	}
@@ -131,8 +136,6 @@ namespace gl
 	void ShaderProgram::SetUniform_v2(const char* name, const float* val)
 	{
 		int loc = glGetUniformLocation(id, name);
-		//if (loc == -1)
-		//	std::cerr << "Uniform '" << name << "' not found.\n";
 
 		glUniform2fv(loc, 1, val);
 	}
@@ -140,8 +143,6 @@ namespace gl
 	void ShaderProgram::SetUniform_v3(const char* name, const float* val)
 	{
 		int loc = glGetUniformLocation(id, name);
-		//if (loc == -1)
-		//	std::cerr << "Uniform '" << name << "' not found.\n";
 
 		glUniform3fv(loc, 1, val);
 	}
@@ -149,8 +150,6 @@ namespace gl
 	void ShaderProgram::SetUniform_v4(const char* name, const float* val)
 	{
 		int loc = glGetUniformLocation(id, name);
-		//if (loc == -1)
-		//	std::cerr << "Uniform '" << name << "' not found.\n";
 
 		glUniform4fv(loc, 1, val);
 	}
@@ -158,8 +157,6 @@ namespace gl
 	void ShaderProgram::SetUniform_m2(const char* name, const float* val, bool transpose)
 	{
 		int loc = glGetUniformLocation(id, name);
-		//if (loc == -1)
-		//	std::cerr << "Uniform '" << name << "' not found.\n";
 
 		glUniformMatrix2fv(loc, 1, transpose, val);
 	}
@@ -167,8 +164,6 @@ namespace gl
 	void ShaderProgram::SetUniform_m3(const char* name, const float* val, bool transpose)
 	{
 		int loc = glGetUniformLocation(id, name);
-		//if (loc == -1)
-		//	std::cerr << "Uniform '" << name << "' not found.\n";
 
 		glUniformMatrix3fv(loc, 1, transpose, val);
 	}
@@ -176,8 +171,6 @@ namespace gl
 	void ShaderProgram::SetUniform_m4(const char* name, const float* val, bool transpose)
 	{
 		int loc = glGetUniformLocation(id, name);
-		//if (loc == -1)
-		//	std::cerr << "Uniform '" << name << "' not found.\n";
 
 		glUniformMatrix4fv(loc, 1, transpose, val);
 	}

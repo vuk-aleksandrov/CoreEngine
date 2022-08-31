@@ -3,8 +3,9 @@
 #include <cstdio>
 #include <cmath>
 
-#define pi		 3.14159265359
-#define pi_half  1.57079632679
+#define pi			3.14159265359
+#define pi_half		1.57079632679
+#define pi_quarter	0.78539816339
 
 namespace math
 {
@@ -107,12 +108,17 @@ namespace math
 		}
 	}
 
+	inline float Length(const vec3& v)
+	{
+		return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+	}
+
 	inline void Perspective(mat4& dest, float fov = (float)pi_half, float aspect = 1.0f, float zNear = 0.1f, float zFar = 1000.0f)
 	{
 		dest[1].y = 1.0f / tan(fov / 2.0f);
 		dest[0].x = dest[1].y * aspect;
 		dest[2].z = zFar / (zFar - zNear);
-		dest[3].z = -zNear * dest[2].z;
+		dest[3].z = -2.0f * zNear * dest[2].z;
 		dest[2].w = 1;
 	}
 
@@ -157,5 +163,19 @@ namespace math
 		dest[1].x = -dest[0].y;
 		dest[1].y = dest[0].x;
 		dest[3].w = 1.0f;
+	}
+
+	inline void Dot(const vec3& v1, const vec3& v2, float& dest)
+	{
+		dest = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+	}
+
+	inline void Cross(const vec3& v1, const vec3& v2, vec3& dest)
+	{
+		dest = {
+			v1.y * v2.z - v1.z * v2.y,
+			v1.z * v2.x - v1.x * v2.z,
+			v1.x * v2.y - v1.y * v2.x
+		};
 	}
 }

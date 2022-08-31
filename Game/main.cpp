@@ -5,23 +5,29 @@
 #include <OpenGL/VertexArray.h>
 
 #include <Window/Window.h>
+#include <Input/Input.h>
 
 #include <Math/Math.h>
 
 #include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cassert>
+
+#include "Mesh.h"
 
 int main() {
-	if (!glfwInit()) {
-		printf("Failed to init glfw\n");
-		return -1;
-	}
+	assert(glfwInit());
 
 	Window window(800, 450, "Game");
 
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << "Failed to initialize OpenGL context" << std::endl;
-		return -1;
-	}
+	assert(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress));
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -30,54 +36,12 @@ int main() {
 
 	// Create vertex buffer
 
-	float vertexData[] = {
-		//	  vertex positions	   vertex colors
-			-0.5f, -0.5f, -0.5f,	 1, 0, 0,
-			 0.5f, -0.5f, -0.5f,	 1, 0, 0,
-			 0.5f,  0.5f, -0.5f,	 1, 0, 0,
-			 0.5f,  0.5f, -0.5f,	 1, 0, 0,
-			-0.5f,  0.5f, -0.5f,	 1, 0, 0,
-			-0.5f, -0.5f, -0.5f,	 1, 0, 0,
+	Mesh teapot("C:/Projects/CoreEngine/Engine/Models/Teapot.obj");
 
-			-0.5f, -0.5f,  0.5f,	 0, 1, 0,
-			 0.5f, -0.5f,  0.5f,	 0, 1, 0,
-			 0.5f,  0.5f,  0.5f,	 0, 1, 0,
-			 0.5f,  0.5f,  0.5f,	 0, 1, 0,
-			-0.5f,  0.5f,  0.5f,	 0, 1, 0,
-			-0.5f, -0.5f,  0.5f,	 0, 1, 0,
-
-			-0.5f,  0.5f,  0.5f,	 0, 0, 1,
-			-0.5f,  0.5f, -0.5f,	 0, 0, 1,
-			-0.5f, -0.5f, -0.5f,	 0, 0, 1,
-			-0.5f, -0.5f, -0.5f,	 0, 0, 1,
-			-0.5f, -0.5f,  0.5f,	 0, 0, 1,
-			-0.5f,  0.5f,  0.5f,	 0, 0, 1,
-
-			 0.5f,  0.5f,  0.5f,	 1, 1, 0,
-			 0.5f,  0.5f, -0.5f,	 1, 1, 0,
-			 0.5f, -0.5f, -0.5f,	 1, 1, 0,
-			 0.5f, -0.5f, -0.5f,	 1, 1, 0,
-			 0.5f, -0.5f,  0.5f,	 1, 1, 0,
-			 0.5f,  0.5f,  0.5f,	 1, 1, 0,
-
-			-0.5f, -0.5f, -0.5f,	 1, 0, 1,
-			 0.5f, -0.5f, -0.5f,	 1, 0, 1,
-			 0.5f, -0.5f,  0.5f,	 1, 0, 1,
-			 0.5f, -0.5f,  0.5f,	 1, 0, 1,
-			-0.5f, -0.5f,  0.5f,	 1, 0, 1,
-			-0.5f, -0.5f, -0.5f,	 1, 0, 1,
-
-			-0.5f,  0.5f, -0.5f,	 0, 1, 1,
-			 0.5f,  0.5f, -0.5f,	 0, 1, 1,
-			 0.5f,  0.5f,  0.5f,	 0, 1, 1,
-			 0.5f,  0.5f,  0.5f,	 0, 1, 1,
-			-0.5f,  0.5f,  0.5f,	 0, 1, 1,
-			-0.5f,  0.5f, -0.5f,	 0, 1, 1
-	};
-	gl::Buffer vertexBuffer(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+	gl::Buffer vertexBuffer(GL_ARRAY_BUFFER, teapot.vertexData.size()*3*sizeof(float), teapot.vertexData.data(), GL_STATIC_DRAW);
 
 	vertexArray.SetVertexAttribs(6 * sizeof(float),
-		{ { 3, GL_FLOAT}, {3, GL_FLOAT } }
+		{ { 3, GL_FLOAT}, { 3, GL_FLOAT} }
 	);
 
 	gl::ShaderProgram program;
@@ -88,9 +52,15 @@ int main() {
 
 	// Perspective  matrix
 	math::mat4 projection;
-	math::Perspective(projection, (float)pi_half, (float)9 / 16, 0.1f, 1000.0f);
+	float aspectRatio = (float)window.Height() / window.Width();
+	math::Perspective(projection, (float)pi_half / 2, aspectRatio, 0.1f, 1000.0f);
 
+	// Rotation angle
 	float theta = 0.f;
+
+	// Camera position
+	math::vec4 camera;
+	camera.z = 40;
 
 	while (window.IsOpen())
 	{
@@ -106,12 +76,26 @@ int main() {
 		math::mat4 rotation;
 		math::Mul(xrotation, yrotation, rotation);
 
+		if (Input::KeyPressed(KEY_LEFT))
+			camera.x += 0.05f;
+		if (Input::KeyPressed(KEY_RIGHT))
+			camera.x -= 0.05f;
+		if (Input::KeyPressed(KEY_DOWN))
+			camera.y += 0.05f;
+		if (Input::KeyPressed(KEY_UP))
+			camera.y -= 0.05f;
+		if (Input::KeyPressed(KEY_S))
+			camera.z += 0.05f;
+		if (Input::KeyPressed(KEY_W))
+			camera.z -= 0.05f;
+
+		program.SetUniform_v4("Camera", &camera[0]);
 		program.SetUniform_m4("Rotation", &rotation[0].x);
 		program.SetUniform_m4("Projection", &projection[0].x);
 
 		theta += 0.01f;
 
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, teapot.vertexData.size()/2);
 
 		window.Update();
 	}

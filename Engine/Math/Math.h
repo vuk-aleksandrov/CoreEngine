@@ -80,6 +80,25 @@ namespace math
 		dest = { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
 	}
 	
+	inline void Mul(mat3& m, const vec3& v, vec3& dest)
+	{
+		dest = {
+			v.x * m[0].x + v.y * m[1].x + v.z * m[2].x,
+			v.x * m[0].y + v.y * m[1].y + v.z * m[2].y,
+			v.x * m[0].z + v.y * m[1].z + v.z * m[2].z
+		};
+	}
+
+	inline void Mul(mat4& m, const vec4& v, vec4& dest)
+	{
+		dest = {
+			v.x * m[0].x + v.y * m[1].x + v.z * m[2].x + v.w * m[3].x,
+			v.x * m[0].y + v.y * m[1].y + v.z * m[2].y + v.w * m[3].y,
+			v.x * m[0].z + v.y * m[1].z + v.z * m[2].z + v.w * m[3].z,
+			v.x * m[0].w + v.y * m[1].w + v.z * m[2].w + v.w * m[3].w
+		};
+	}
+
 	inline void Mul(mat3& m1, mat3& m2, mat3& dest)
 	{
 		for (int i = 0; i < 3; i++)
@@ -88,7 +107,7 @@ namespace math
 			{
 				for (int k = 0; k < 3; k++)
 				{
-					dest[i][j] += m1[i][k] * m2[k][j];
+					dest[i][j] += m1[j][k] * m2[k][i];
 				}
 			}
 		}
@@ -102,7 +121,7 @@ namespace math
 			{
 				for (int k = 0; k < 4; k++)
 				{
-					dest[i][j] += m1[i][k] * m2[k][j];
+					dest[i][j] += m1[j][k] * m2[k][i];
 				}
 			}
 		}
@@ -165,9 +184,9 @@ namespace math
 		dest[3].w = 1.0f;
 	}
 
-	inline void Dot(const vec3& v1, const vec3& v2, float& dest)
+	inline float Dot(const vec3& v1, const vec3& v2)
 	{
-		dest = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
 
 	inline void Cross(const vec3& v1, const vec3& v2, vec3& dest)

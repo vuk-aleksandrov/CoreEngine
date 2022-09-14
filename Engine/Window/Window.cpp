@@ -11,10 +11,12 @@ Window::Window(int width, int height, const char* title)
 
 	glfwMakeContextCurrent(handle);
 
+	/*
 	if (glfwRawMouseMotionSupported())
 		glfwSetInputMode(handle, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
 	glfwSetInputMode(handle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	*/
 }
 
 Window::~Window()
@@ -29,6 +31,17 @@ bool Window::IsOpen()
 
 void Window::Update()
 {
+	// Show FPS
+	frameCount++;
+	double currentTime = glfwGetTime();
+	const double elapsedTime = currentTime - previousTime;
+	if (elapsedTime >= 1) {
+		SetTitle("Game  FPS " + std::to_string(frameCount));
+		frameCount = 0;
+		previousTime = currentTime;
+	}
+
+	glfwSwapInterval(1);
 	glfwSwapBuffers(handle);
 	glfwPollEvents();
 }

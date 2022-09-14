@@ -2,8 +2,11 @@
 
 #include <GLFW/glfw3.h>
 
-struct Window 
+#include <string>
+
+class Window 
 {
+public:
 	GLFWwindow* handle;
 
 	Window(int width, int height, const char* title);
@@ -24,4 +27,11 @@ struct Window
 		glfwGetWindowSize(handle, nullptr, &height);
 		return height;
 	}
+
+	inline void SetTitle(std::string title) {
+		glfwSetWindowTitle(handle, title.c_str());
+	}
+private:
+	double previousTime = glfwGetTime();
+	int frameCount = 0;
 };

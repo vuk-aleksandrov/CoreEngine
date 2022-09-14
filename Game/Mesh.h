@@ -4,12 +4,12 @@
 
 #include <Math/Math.h>
 
-class Mesh
+struct Mesh
 {
-public:
-	Mesh(const char* fileDir);
-	~Mesh();
+	// first vector contains vertices and second normals
+	std::vector<math::vec3> vertexPool[2];
 
-	std::vector<math::vec3> vertices, normals;
 	std::vector<math::vec3> vertexData;
+	
+	Mesh(const char* fileDir);
 };

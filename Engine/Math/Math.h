@@ -70,6 +70,11 @@ namespace math
 		dest = { v.x - x, dest.y = v.y - x, v.z - x };
 	}
 
+	inline void Mul(const vec3& v, float x, vec3& dest)
+	{
+		dest = { v.x * x, v.y * x, v.z * x };
+	}
+
 	inline void Add(const vec3& v1, const vec3& v2, vec3& dest)
 	{
 		dest = { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
@@ -80,6 +85,16 @@ namespace math
 		dest = { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z };
 	}
 	
+	inline void Add(const vec4& v1, const vec4& v2, vec4& dest)
+	{
+		dest = { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z , 1};
+	}
+
+	inline void Sub(const vec4& v1, const vec4& v2, vec4& dest)
+	{
+		dest = { v1.x - v2.x, v1.y - v2.y, v1.z - v2.z , 1};
+	}
+
 	inline void Mul(mat3& m, const vec3& v, vec3& dest)
 	{
 		dest = {
@@ -132,56 +147,98 @@ namespace math
 		return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 	}
 
+	inline void Normalize(vec3& v) {
+		const float len = Length(v);
+		v.x /= len, v.y /= len, v.z /= len;
+	}
+
 	inline void Perspective(mat4& dest, float fov = (float)pi_half, float aspect = 1.0f, float zNear = 0.1f, float zFar = 1000.0f)
 	{
 		dest[1].y = 1.0f / tan(fov / 2.0f);
 		dest[0].x = dest[1].y * aspect;
-		dest[2].z = zFar / (zFar - zNear);
-		dest[3].z = -2.0f * zNear * dest[2].z;
+		dest[2].z = (zFar+zNear) / (zFar - zNear);
+		dest[3].z = -2.0f * zNear * zFar / (zFar - zNear);
 		dest[2].w = 1;
 	}
 
-	inline void Rotation(mat4& dest, float alpha = 0.0f, float beta = 0.0f, float gamma = 0.0f)
+	inline void Perspective0(mat4& dest, float fov = (float)pi_half, float aspect = 1.0f, float zNear = 0.1f, float zFar = 1000.0f)
+	{
+		dest[1].y = 1.0f / tan(fov / 2.0f);
+		dest[0].x = dest[1].y * aspect;
+		dest[2].z = -(zFar+zNear) / (zFar - zNear);
+		dest[3].z = -2.0f * zFar * zNear / (zFar - zNear);
+		dest[2].w = -1;
+	}
+
+	inline void Perspective2(mat4& dest, float left, float right, float bottom, float top, float zNear, float zFar)
+	{
+		const float A = (right + left) / (right - left);
+		const float B = (top + bottom) / (top - bottom);
+		const float C = -(zFar + zNear) / (zFar - zNear);
+		const float D = (-2.0f * zFar * zNear) / (zFar - zNear);
+		dest = {
+			2.0f * zNear / (right - left), 0, 0, 0,
+			0, 2.0f * zNear / (top - bottom), 0, 0,
+			0, 0, C, D,
+			0, 0, -1, 0
+		};
+	}
+
+	inline void Perspective3(mat4& dest, float left, float right, float bottom, float top, float zNear, float zFar)
+	{
+		dest = {
+			1.0f/right, 0, 0, 0,
+			0, 1.0f/top, 0,
+			0, 0, 2.0f/(zNear-zFar), (zFar+zNear)/(zNear-zFar),
+			0, 0, 0, 1
+		};
+	}
+
+	inline void Rotate(math::vec3& v, float alpha = 0.0f, float beta = 0.0f, float gamma = 0.0f)
 	{
 		float sa = sin(alpha), ca = cos(alpha);
 		float sb = sin(beta), cb = cos(beta);
 		float sc = sin(gamma), cc = cos(gamma);
 
-		dest = {
-			ca * cb, ca * sb * sc - sa * cc, ca * sb * cc + sa * sc, 0.f,
-			sa * cb, sa * sb * sc + ca * cc, sa * sb * cc - ca * sc, 0.f,
-			-sb, cb * sc, cb * cc,0.f,
-			0.f, 0.f, 0.f, 1.f
+		math::mat3 m = {
+			ca * cb, ca * sb * sc - sa * cc, ca * sb * cc + sa * sc,
+			sa * cb, sa * sb * sc + ca * cc, sa * sb * cc - ca * sc,
+			-sb, cb * sc, cb * cc
 		};
+
+		Mul(m, v, v);
 	}
 
-	inline void xRotation(float theta, mat4& dest)
+	inline void RotateAroundX(vec3& v, float theta)
 	{
-		dest[0].x = 1.f;
-		dest[1].y = cos(theta);
-		dest[1].z = -sin(theta);
-		dest[2].y = -dest[1].z;
-		dest[2].z = dest[1].y;
-		dest[3].w = 1.0f;
+		math::mat3 m;
+		m[0].x = 1.f;
+		m[1].y = cos(theta);
+		m[1].z = -sin(theta);
+		m[2].y = -m[1].z;
+		m[2].z =  m[1].y;
+		Mul(m, v, v);
 	}
 
-	inline void yRotation(float theta, mat4& dest)
+	inline void RotateAroundY(vec3& v, float theta)
 	{
-		dest[0].x = cos(theta);
-		dest[0].z = sin(theta);
-		dest[1].y = 1;
-		dest[2].x = -dest[0].z;
-		dest[2].z = dest[0].x;
-		dest[3].w = 1.0f;
+		math::mat3 m;
+		m[0].x = cos(theta);
+		m[0].z = sin(theta);
+		m[1].y = 1;
+		m[2].x = -m[0].z;
+		m[2].z = m[0].x;
+		Mul(m, v, v);
 	}
 
-	inline void zRotation(float theta, mat4& dest)
+	inline void zRotation(vec3& v, float theta)
 	{
-		dest[0].x = cos(theta);
-		dest[0].y = -sin(theta);
-		dest[1].x = -dest[0].y;
-		dest[1].y = dest[0].x;
-		dest[3].w = 1.0f;
+		math::mat3 m;
+		m[0].x = cos(theta);
+		m[0].y = -sin(theta);
+		m[1].x = -m[0].y;
+		m[1].y = m[0].x;
+		Mul(m, v, v);
 	}
 
 	inline float Dot(const vec3& v1, const vec3& v2)

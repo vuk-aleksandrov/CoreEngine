@@ -42,7 +42,7 @@ Mesh::Mesh(const char* fileDir)
 				int c = 0;
 				while (s[i] != '\0')
 				{
-					if (s[i] == '/' && c <2)
+					if (s[i] == '/' && c < 2)
 					{
 						vertexData.push_back(vertexPool[c++][index - 1]);
 						index = 0;

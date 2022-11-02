@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(Engine)
 
 add_library(Engine 
+	"Math/Math.h"
 	"OpenGL/glad/glad.h"
 	"OpenGL/glad/glad.c"
 	"OpenGL/Buffer.h"
@@ -13,9 +14,10 @@ add_library(Engine
 	"OpenGL/VertexArray.cpp"
 	"Window/Window.cpp"
 	"Window/Window.h"
-	"Math/Math.h"
 	"Input/Input.h"
 	"Input/Input.cpp"
+	"Camera/Camera.h"
+	"Camera/Camera.cpp"
  )
 target_include_directories(Engine PUBLIC /)
 

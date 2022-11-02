@@ -1,9 +1,6 @@
 #include "Window.h"
 
-#include <iostream>
-#include <cstdio>
 #include <cassert>
-
 
 Window::Window(int width, int height, const char* title)
 {
@@ -12,7 +9,8 @@ Window::Window(int width, int height, const char* title)
 
 	glfwMakeContextCurrent(handle);
 
-	
+	currentWindow = this;
+
 	if (glfwRawMouseMotionSupported())
 		glfwSetInputMode(handle, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 	
@@ -46,4 +44,6 @@ void Window::Update()
 	glfwSwapBuffers(handle);
 	glfwPollEvents();
 }
+
+Window* Window::currentWindow = nullptr;
 

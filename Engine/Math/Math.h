@@ -2,13 +2,24 @@
 
 #include <cstdio>
 #include <cmath>
+#include <algorithm>
 
-#define pi			3.14159265359
-#define pi_half		1.57079632679
-#define pi_quarter	0.78539816339
+#define PI			3.14159265359
+#define PI_HALF		1.57079632679
+#define PI_QUARTER	0.78539816339
 
 namespace math
 {
+	struct vec2
+	{
+		double x = 0, y = 0;
+	};
+
+	inline void Sub(const vec2& v1, const vec2& v2, vec2& dest)
+	{
+		dest = { v1.x - v2.x, v1.y - v2.y };
+	}
+
 	struct vec3
 	{
 		union 
@@ -152,61 +163,39 @@ namespace math
 		v.x /= len, v.y /= len, v.z /= len;
 	}
 
-	inline void Perspective(mat4& dest, float fov = (float)pi_half, float aspect = 1.0f, float zNear = 0.1f, float zFar = 1000.0f)
+	inline float Dot(const vec3& v1, const vec3& v2)
 	{
-		dest[1].y = 1.0f / tan(fov / 2.0f);
-		dest[0].x = dest[1].y * aspect;
-		dest[2].z = (zFar+zNear) / (zFar - zNear);
-		dest[3].z = -2.0f * zNear * zFar / (zFar - zNear);
-		dest[2].w = 1;
+		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
 
-	inline void Perspective0(mat4& dest, float fov = (float)pi_half, float aspect = 1.0f, float zNear = 0.1f, float zFar = 1000.0f)
+	inline void Cross(const vec3& v1, const vec3& v2, vec3& dest)
+	{
+		dest = {
+			v1.y * v2.z - v1.z * v2.y,
+			v1.z * v2.x - v1.x * v2.z,
+			v1.x * v2.y - v1.y * v2.x
+		};
+	}
+
+	inline void Perspective(mat4& dest, float fov = (float)PI_HALF, float aspect = 1.0f, float zNear = 0.1f, float zFar = 1000.0f)
 	{
 		dest[1].y = 1.0f / tan(fov / 2.0f);
 		dest[0].x = dest[1].y * aspect;
 		dest[2].z = -(zFar+zNear) / (zFar - zNear);
-		dest[3].z = -2.0f * zFar * zNear / (zFar - zNear);
+		dest[3].z = -2.0f * zNear * zFar / (zFar - zNear);
 		dest[2].w = -1;
 	}
 
-	inline void Perspective2(mat4& dest, float left, float right, float bottom, float top, float zNear, float zFar)
+	inline mat4 InverseView(math::vec3 a, math::vec3 b, math::vec3 c, math::vec3 t)
 	{
-		const float A = (right + left) / (right - left);
-		const float B = (top + bottom) / (top - bottom);
-		const float C = -(zFar + zNear) / (zFar - zNear);
-		const float D = (-2.0f * zFar * zNear) / (zFar - zNear);
-		dest = {
-			2.0f * zNear / (right - left), 0, 0, 0,
-			0, 2.0f * zNear / (top - bottom), 0, 0,
-			0, 0, C, D,
-			0, 0, -1, 0
+		return {
+			a.x, b.x, c.x, 0,
+			a.y, b.y, c.y, 0,
+			a.z, b.z, c.z, 0,
+			-math::Dot(t, a),
+			-math::Dot(t, b),
+			-math::Dot(t, c), 1
 		};
-	}
-
-	inline void Perspective3(mat4& dest, float left, float right, float bottom, float top, float zNear, float zFar)
-	{
-		dest = {
-			1.0f/right, 0, 0, 0,
-			0, 1.0f/top, 0,
-			0, 0, 2.0f/(zNear-zFar), (zFar+zNear)/(zNear-zFar),
-			0, 0, 0, 1
-		};
-	}
-
-	inline void Rotate(math::vec3& v, float alpha = 0.0f, float beta = 0.0f, float gamma = 0.0f)
-	{
-		float sa = sin(alpha), ca = cos(alpha);
-		float sb = sin(beta), cb = cos(beta);
-		float sc = sin(gamma), cc = cos(gamma);
-
-		math::mat3 m = {
-			ca * cb, ca * sb * sc - sa * cc, ca * sb * cc + sa * sc,
-			sa * cb, sa * sb * sc + ca * cc, sa * sb * cc - ca * sc,
-			-sb, cb * sc, cb * cc
-		};
-
-		Mul(m, v, v);
 	}
 
 	inline void RotateAroundX(vec3& v, float theta)
@@ -231,7 +220,7 @@ namespace math
 		Mul(m, v, v);
 	}
 
-	inline void zRotation(vec3& v, float theta)
+	inline void RotateAroundZ(vec3& v, float theta)
 	{
 		math::mat3 m;
 		m[0].x = cos(theta);
@@ -239,19 +228,5 @@ namespace math
 		m[1].x = -m[0].y;
 		m[1].y = m[0].x;
 		Mul(m, v, v);
-	}
-
-	inline float Dot(const vec3& v1, const vec3& v2)
-	{
-		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-	}
-
-	inline void Cross(const vec3& v1, const vec3& v2, vec3& dest)
-	{
-		dest = {
-			v1.y * v2.z - v1.z * v2.y,
-			v1.z * v2.x - v1.x * v2.z,
-			v1.x * v2.y - v1.y * v2.x
-		};
 	}
 }

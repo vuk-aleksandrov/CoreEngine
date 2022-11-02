@@ -31,6 +31,9 @@ public:
 	inline void SetTitle(std::string title) {
 		glfwSetWindowTitle(handle, title.c_str());
 	}
+
+	static Window* currentWindow;
+
 private:
 	double previousTime = glfwGetTime();
 	int frameCount = 0;

@@ -2,8 +2,6 @@
 
 #include "Mesh.h"
 
-#include <iostream>
-#include <string>
 #include <cstdio>
 #include <cstring>
 #include <cassert>
